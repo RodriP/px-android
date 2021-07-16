@@ -245,7 +245,7 @@ public abstract class PaymentMethodFragment<T extends DrawableFragmentItem>
 
     private Label createLabel(String message, @Nullable Text text) {
         return text != null ? new Label(message, text.getTextColor(), text.getWeight(), text.getBackgroundColor()) :
-                new Label(message, null, null, null);
+                new Label(message);
     }
 
     @Override

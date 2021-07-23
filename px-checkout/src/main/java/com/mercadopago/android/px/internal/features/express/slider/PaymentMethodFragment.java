@@ -49,6 +49,7 @@ public abstract class PaymentMethodFragment<T extends DrawableFragmentItem>
     private SwitchModel switchModel;
     private PaymentMethodPagerListener listener = paymentTypeId -> {
     };
+    private boolean hasHighlightText;
 
     @Override
     public void onAttach(@NonNull final Context context) {
@@ -102,8 +103,18 @@ public abstract class PaymentMethodFragment<T extends DrawableFragmentItem>
         if (hasFocus()) {
             onFocusIn();
         }
+
         if (cardDrawerView != null) {
+            setBottomLabel();
             updateCardDrawerView(cardDrawerView);
+        }
+    }
+
+    private void setBottomLabel() {
+        if (!model.shouldHighlightBottomDescription()) {
+            Text text = model.getBottomDescription();
+            Label label = new Label(text.getMessage(), text.getBackgroundColor(), text.getTextColor(), text.getWeight(), false);
+            cardDrawerView.setBottomLabel(label);
         }
     }
 
@@ -157,6 +168,14 @@ public abstract class PaymentMethodFragment<T extends DrawableFragmentItem>
 
     protected String getAccessibilityContentDescription() {
         return TextUtil.EMPTY;
+    }
+
+    @Override
+    public void updateHighlightText(@Nullable final String text) {
+        hasHighlightText = cardDrawerView != null && TextUtil.isNotEmpty(text);
+        if (hasHighlightText) {
+            cardDrawerView.setBottomLabel(new Label(text));
+        }
     }
 
     @Override
@@ -236,23 +255,21 @@ public abstract class PaymentMethodFragment<T extends DrawableFragmentItem>
     }
 
     @Override
-    public void animateHighlightMessageIn(@Nullable String message) {
-        if (message != null && cardDrawerView != null) {
-            cardDrawerView.setBottomLabel(createLabel(message, model.getBottomDescription()));
-            cardDrawerView.showBottomLabelWithAnimation();
+    public void animateHighlightMessageIn() {
+        if (shouldAnimate()) {
+            cardDrawerView.showBottomLabel();
         }
-    }
-
-    private Label createLabel(String message, @Nullable Text text) {
-        return text != null ? new Label(message, text.getTextColor(), text.getWeight(), text.getBackgroundColor()) :
-                new Label(message);
     }
 
     @Override
     public void animateHighlightMessageOut() {
-        if (cardDrawerView != null) {
-            cardDrawerView.hideBottomLabelWithAnimation();
+        if (shouldAnimate()) {
+            cardDrawerView.hideBottomLabel();
         }
+    }
+
+    private boolean shouldAnimate() {
+        return cardDrawerView != null && hasHighlightText;
     }
 
     @Override
@@ -272,9 +289,9 @@ public abstract class PaymentMethodFragment<T extends DrawableFragmentItem>
 
         card.setOnClickListener(
             v -> DisabledPaymentMethodDetailDialog
-                    .showDialog(parentFragment, ((DisabledDetailDialogLauncher) parentFragment).getRequestCode(),
-                        disabledPaymentMethod.getPaymentStatusDetail(),
-                        model.getCommonsByApplication().getCurrent().getStatus()));
+                .showDialog(parentFragment, ((DisabledDetailDialogLauncher) parentFragment).getRequestCode(),
+                    disabledPaymentMethod.getPaymentStatusDetail(),
+                    model.getCommonsByApplication().getCurrent().getStatus()));
     }
 
     public void enable() {
@@ -300,7 +317,7 @@ public abstract class PaymentMethodFragment<T extends DrawableFragmentItem>
         final int lighterBackgroundColor =
             Color.argb((int) (alpha * 0.7f), (int) (red * 0.8f), (int) (green * 0.8f), (int) (blue * 0.8f));
         Color.argb(0, 0, 0, 0);
-        final int[] ints = {backgroundColor, lighterBackgroundColor};
+        final int[] ints = { backgroundColor, lighterBackgroundColor };
         final GradientDrawable gradientDrawable = new GradientDrawable(GradientDrawable.Orientation.BL_TR,
             ints);
 

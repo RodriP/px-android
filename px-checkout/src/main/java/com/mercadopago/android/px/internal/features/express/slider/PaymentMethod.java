@@ -10,9 +10,11 @@ public interface PaymentMethod {
 
         void updateState();
 
+        void updateHighlightText(@Nullable final String text);
+
         void disable();
 
-        void animateHighlightMessageIn(@Nullable final String text);
+        void animateHighlightMessageIn();
 
         void animateHighlightMessageOut();
     }

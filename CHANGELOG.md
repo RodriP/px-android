@@ -1,3 +1,7 @@
+## VERSION 5.0.0
+* FEATURE - Migration of Nudata flow to Dynamic Features also update PXBehaviourConfigurer to avoid null sets.
+
+
 ## VERSION 4.85.0
 _28_07_2021_
 * FEATURE - Adds Accept third party card flag.

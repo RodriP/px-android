@@ -1,6 +1,9 @@
-## VERSION 4.90.0
+## VERSION 4.90.0 [NO MERGE]
 * FEATURE - Migration of Nudata flow to Dynamic Features also update PXBehaviourConfigurer to avoid null sets.
 
+## VERSION 4.85.1
+_02_08_2021_
+* FIX - Sends correct product id on discount params.
 
 ## VERSION 4.85.0
 _28_07_2021_

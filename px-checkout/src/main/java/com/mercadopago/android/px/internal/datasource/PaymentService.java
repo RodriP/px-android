@@ -376,7 +376,9 @@ public class PaymentService implements PaymentRepository {
                 .setPayer(paymentSettingRepository.getCheckoutPreference().getPayer())
                 .setTransactionAmount(amountToPay)
                 .setCampaign(discountModel.getCampaign())
-                .setRawAmount(amountRepository.getAmountWithoutDiscount(paymentMethod.getPaymentTypeId(), payerCost))
+                .setNoDiscountAmount(amountRepository.getAmountWithoutDiscount(paymentMethod.getPaymentTypeId(),
+                    payerCost))
+                .setRawAmount(amountRepository.getTaxFreeAmount(paymentMethod.getPaymentTypeId(), payerCost))
                 .createPaymentData();
 
             return Collections.singletonList(paymentData);

@@ -145,7 +145,7 @@ public class PaymentCongratsModelMapper extends Mapper<BusinessPaymentModel, Pay
 
         if (paymentData.getDiscount() != null) {
             paymentInfo.withDiscountData(paymentData.getDiscount().getName(),
-                getPrettyAmount(currency, paymentData.getRawAmount()));
+                getPrettyAmount(currency, paymentData.getNoDiscountAmount()));
         }
 
         return paymentInfo.build();

@@ -252,7 +252,7 @@ public final class Session extends ApplicationModule {
     public AmountRepository getAmountRepository() {
         if (amountRepository == null) {
             amountRepository = new AmountService(configurationModule.getPaymentSettings(),
-                configurationModule.getChargeRepository(), getDiscountRepository());
+                configurationModule.getChargeRepository(), getDiscountRepository(), getAmountConfigurationRepository());
         }
         return amountRepository;
     }

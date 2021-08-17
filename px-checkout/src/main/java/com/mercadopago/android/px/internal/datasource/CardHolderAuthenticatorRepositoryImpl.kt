@@ -19,7 +19,7 @@ internal class CardHolderAuthenticatorRepositoryImpl(
             ?: throw MalformedJsonException("Malformed sdkEphemeralPublicKey"))
         val accessToken = paymentSettingRepository.privateKey.orEmpty()
         val body = CardHolderAuthenticatorBody(
-            paymentData.rawAmount.toString(),
+            paymentData.noDiscountAmount.toString(),
             CardHolderAuthenticatorBody.Card(
                 token.cardHolder?.name.orEmpty(),
                 paymentData.paymentMethod.id

@@ -300,6 +300,8 @@ public abstract class PaymentMethodFragment<T extends DrawableFragmentItem>
         final GenericDialogItem genericDialogItem = model.getGenericDialogItem();
         if (genericDialogItem != null) {
             card.setOnClickListener(v -> GenericDialog.showDialog(getChildFragmentManager(), genericDialogItem));
+        } else {
+            card.setOnClickListener(null);
         }
     }
 

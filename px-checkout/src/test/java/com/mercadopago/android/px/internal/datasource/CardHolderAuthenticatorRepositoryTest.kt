@@ -94,6 +94,7 @@ class CardHolderAuthenticatorRepositoryTest {
 
         return PaymentData.Builder()
             .setRawAmount(BigDecimal.TEN)
+            .setNoDiscountAmount(BigDecimal.TEN)
             .setPaymentMethod(paymentMethod)
     }
 }

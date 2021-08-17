@@ -1,5 +1,10 @@
-## VERSION 4.90.0 [NO MERGE]
+## VERSION 4.90.0
 * FEATURE - Migration of Nudata flow to Dynamic Features also update PXBehaviourConfigurer to avoid null sets.
+
+## VERSION 4.86.0
+_12_08_2021_
+* FEATURE - Added support for IDC regulation
+* FIX - Fix resource not found exception
 
 ## VERSION 4.85.1
 _02_08_2021_

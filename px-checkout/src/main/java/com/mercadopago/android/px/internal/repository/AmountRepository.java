@@ -53,10 +53,18 @@ public interface AmountRepository {
     BigDecimal getAppliedCharges(@NonNull String paymentTypeId, @Nullable PayerCost payerCost);
 
     /**
-     * Amount to pay with no discount applied.
+     * Amount to pay with taxes and no discount applied.
      *
-     * @return amount without discount.
+     * @return amount without discount (items + charges + taxes).
      */
     @NonNull
     BigDecimal getAmountWithoutDiscount(@NonNull String paymentTypeId, @Nullable PayerCost payerCost);
+
+    /**
+     * Amount to pay with no tax and no discount applied.
+     *
+     * @return amount without tax and discount (items + charges).
+     */
+    @NonNull
+    BigDecimal getTaxFreeAmount(@NonNull String paymentTypeId, @Nullable PayerCost payerCost);
 }

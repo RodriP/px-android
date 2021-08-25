@@ -102,7 +102,7 @@ internal class PayButtonViewModelTest {
     fun setUp() {
         whenever(customTextsRepository.customTexts).thenReturn(customTexts)
         whenever(payButtonViewModelMapper.map(customTexts)).thenReturn(payButtonTexts)
-        whenever(connectionHelper.checkConnection()).thenReturn(true)
+        whenever(connectionHelper.hasConnection()).thenReturn(true)
         whenever(paymentSettingRepository.checkoutPreference).thenReturn(mock())
         whenever(paymentSettingRepository.site).thenReturn(Sites.ARGENTINA)
         whenever(renderModeMapper.map(any<RenderMode>())).thenReturn(mock())
@@ -137,7 +137,7 @@ internal class PayButtonViewModelTest {
 
     @Test
     fun preparePaymentWhenNonConnection() {
-        whenever(connectionHelper.checkConnection()).thenReturn(false)
+        whenever(connectionHelper.hasConnection()).thenReturn(false)
         payButtonViewModel.preparePayment()
         verify(uiStateObserver).onChanged(any<UIError.ConnectionError>())
     }

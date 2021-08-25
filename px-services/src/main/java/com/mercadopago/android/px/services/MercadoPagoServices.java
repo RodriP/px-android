@@ -234,7 +234,8 @@ public class MercadoPagoServices {
             queryParams.put("access_token", privateKey);
         }
         final PaymentService paymentService = retrofitClient.create(PaymentService.class);
-        paymentService.createPayment(transactionId, securityType, paymentData, queryParams)
+        final String profileId = BehaviourProvider.getAuthenticationBehaviour().getDeviceProfileId();
+        paymentService.createPayment(transactionId, securityType, profileId, paymentData, queryParams)
             .enqueue(callback);
     }
 

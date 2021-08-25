@@ -345,6 +345,7 @@ public class PaymentService implements PaymentRepository {
                 .setCampaign(discountModel.getCampaign())
                 .setDiscount(splitConfiguration.primaryPaymentMethod.discount)
                 .setRawAmount(splitConfiguration.primaryPaymentMethod.amount)
+                .setNoDiscountAmount(splitConfiguration.primaryPaymentMethod.amount)
                 .createPaymentData();
 
             final PaymentData secondaryPaymentData = new PaymentData.Builder()
@@ -354,6 +355,7 @@ public class PaymentService implements PaymentRepository {
                 .setCampaign(discountModel.getCampaign())
                 .setDiscount(splitConfiguration.secondaryPaymentMethod.discount)
                 .setRawAmount(splitConfiguration.secondaryPaymentMethod.amount)
+                .setNoDiscountAmount(splitConfiguration.secondaryPaymentMethod.amount)
                 .createPaymentData();
 
             return Arrays.asList(paymentData, secondaryPaymentData);

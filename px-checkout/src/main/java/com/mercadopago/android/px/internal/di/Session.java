@@ -202,6 +202,11 @@ public final class Session extends ApplicationModule {
     }
 
     @NonNull
+    public NetworkModule getNetworkModule() {
+        return networkModule;
+    }
+
+    @NonNull
     public CheckoutRepository getCheckoutRepository() {
         if (checkoutRepository == null) {
             final PaymentSettingRepository paymentSettings = getConfigurationModule().getPaymentSettings();

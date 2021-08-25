@@ -1,5 +1,8 @@
 ## VERSION 4.90.0
 * FEATURE - Migration of Nudata flow to Dynamic Features also update PXBehaviourConfigurer to avoid null sets.
+## VERSION 4.87.0
+_19_08_2021_
+* FEATURE - Added profile id as header in payments api call
 
 ## VERSION 4.86.0
 _12_08_2021_

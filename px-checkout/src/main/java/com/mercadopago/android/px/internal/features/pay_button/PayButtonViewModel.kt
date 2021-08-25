@@ -88,7 +88,7 @@ internal class PayButtonViewModel(
 
     override fun preparePayment() {
         state.paymentConfiguration = null
-        if (connectionHelper.checkConnection()) {
+        if (connectionHelper.hasConnection()) {
             handler?.prePayment(object : OnReadyForPaymentCallback {
                 override fun call(paymentConfiguration: PaymentConfiguration) {
                     if (paymentConfiguration.customOptionId.isNotNullNorEmpty()) {

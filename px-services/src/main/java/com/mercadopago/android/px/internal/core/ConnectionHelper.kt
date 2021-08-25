@@ -2,37 +2,27 @@ package com.mercadopago.android.px.internal.core
 
 import android.content.Context
 import android.net.ConnectivityManager
+import android.net.Network
 import android.net.NetworkCapabilities
 import android.os.Build
 import androidx.annotation.RequiresApi
+import java.util.Collections
 
-class ConnectionHelper {
-
-    private lateinit var context: Context
-
-    fun initialize(context: Context) {
-        this.context = context
-    }
+class ConnectionHelper(private val context: Context) {
 
     fun hasConnection(): Boolean {
-        return context.let { ctx ->
-            runCatching {
-                val cm = (ctx.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager)
-
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    getNetWorkStateFromMarshmallowAndAbove(cm)
-                } else {
-                    checkConnection()
-                }
-            }.getOrDefault(false)
-        } ?: false
+        val cm = (context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager)
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            checkConnection(cm)
+        } else {
+            checkConnectionLegacy(cm)
+        }
     }
 
     @Suppress("DEPRECATION")
-    fun checkConnection() = try {
+    private fun checkConnectionLegacy(cm: ConnectivityManager) = try {
         var haveConnectedWifi = false
         var haveConnectedMobile = false
-        val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val networkInfo = cm.activeNetworkInfo
         if (networkInfo != null && networkInfo.isConnected) {
             if (networkInfo.type == ConnectivityManager.TYPE_WIFI) {
@@ -52,24 +42,24 @@ class ConnectionHelper {
         false
     }
 
-    @RequiresApi(Build.VERSION_CODES.M)
-    private fun getNetWorkStateFromMarshmallowAndAbove(cm: ConnectivityManager): Boolean {
-        return getNetworkCapabilities(cm)?.let { capabilities ->
-            when {
-                capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
-                capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
-                else -> false
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+    private fun checkConnection(cm: ConnectivityManager): Boolean {
+        getNetworks(cm).forEach { network ->
+            cm.getNetworkCapabilities(network)?.let {
+                if (it.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)) {
+                    return true
+                }
             }
-        } ?: false
+        }
+        return false
     }
 
-    @RequiresApi(Build.VERSION_CODES.M)
-    private fun getNetworkCapabilities(cm: ConnectivityManager): NetworkCapabilities? {
-        return cm.activeNetwork?.let { cm.getNetworkCapabilities(it) }
-    }
-
-    companion object {
-        @JvmStatic
-        val instance by lazy { ConnectionHelper() }
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+    private fun getNetworks(cm: ConnectivityManager): List<Network> {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            cm.activeNetwork?.let { Collections.singletonList(it) } ?: emptyList()
+        } else {
+            cm.allNetworks.toList()
+        }
     }
 }

@@ -7,6 +7,7 @@ import com.mercadopago.android.px.internal.base.CoroutineContextProvider
 import com.mercadopago.android.px.internal.callbacks.ApiResponse
 import com.mercadopago.android.px.internal.core.ConnectionHelper
 import com.mercadopago.android.px.internal.services.CheckoutService
+import com.mercadopago.android.px.internal.util.ApiUtil;
 import com.mercadopago.android.px.mocks.CheckoutResponseStub
 import com.mercadopago.android.px.model.exceptions.ApiException
 import com.mercadopago.android.px.model.exceptions.SocketTimeoutApiException
@@ -65,7 +66,10 @@ class NetworkApiTest {
     fun testApiCallForWithPreferenceIdResponseFailure() {
         whenever(connectionHelper.hasConnection()).thenReturn(false)
         runBlocking {
-            val apiResponse = ApiResponse.Failure(ApiException().apply { message = "No connection" })
+            val apiResponse = ApiResponse.Failure(ApiException().apply {
+                status = ApiUtil.StatusCodes.NO_CONNECTIVITY_ERROR
+                message = "No connection"
+            })
             val result = networkApi.apiCallForResponse(ITestService::class.java) {
                 it.apiCall(ITestService.Responses.SUCCESS) // This does not matter because we simulate no connection
             }
